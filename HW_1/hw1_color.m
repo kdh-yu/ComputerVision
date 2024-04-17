@@ -1,14 +1,14 @@
 clear all;
 
-img = imread('peppers.png');
-%img = imread('./fig/cb.png');
+%img = imread('peppers.png');
+img = imread('./fig/cb.png');
 
 % 1) RGB, Matlab
 R = img(:, :, 1);
 G = img(:, :, 2);
 B = img(:, :, 3);
-imwrite([R, G, B], './fig/RGB_peppers.png');
-%imwrite([R, G, B], './fig/RGB_cb.png');
+%imwrite([R, G, B], './fig/RGB_peppers.png');
+imwrite([R, G, B], './fig/RGB_cb.png');
 
 % 2) YCbCr, Matlab
 YCbCr = [ 77  150   29; 
@@ -17,10 +17,10 @@ YCbCr = [ 77  150   29;
 img_YCbCr = reshape(double(img)/255, [], 3) * YCbCr;
 img_YCbCr = reshape(img_YCbCr, size(img));
 Y = img_YCbCr(:, :, 1);
-Cb = img_YCbCr(:, :, 2);
-Cr = img_YCbCr(:, :, 3);
-imwrite([Y, Cb, Cr], './fig/YCbCr_peppers.png');
-%imwrite([Y, Cb, Cr], './fig/YCbCr_cb.png');
+Cb = min(img_YCbCr(:, :, 2) + 0.5, 1);
+Cr = min(img_YCbCr(:, :, 3) + 0.5, 1);
+%imwrite([Y, Cb, Cr], './fig/YCbCr_peppers.png');
+imwrite([Y, Cb, Cr], './fig/YCbCr_cb.png');
 
 % 3) HSI, Matlab
 R = double(R) / 255;
@@ -31,8 +31,8 @@ S = 1 - min(min(R, G), B) ./ (I+eps);
 H = 1 / (2*pi) * acos((2*R-G-B)./(2*sqrt((R-G).^2+(R-B).*(G-B))+eps));
 H(B>G) = 1 - H(B>G);
 H(I==0) = 0;
-imwrite([H, S, I], './fig/HSI_peppers.png');
-%imwrite([H, S, I], './fig/HSI_cb.png');
+%imwrite([H, S, I], './fig/HSI_peppers.png');
+imwrite([H, S, I], './fig/HSI_cb.png');
 
 % 4) Modifying Image
 S = S+40/255;
@@ -60,5 +60,5 @@ for i = 1:size(R, 1)
         hsi(i, j, 3) = b;
     end
 end
-imwrite(hsi, './fig/HSI2RGB_peppers.png');
-%imwrite(hsi, './fig/HSI2RGB_cb.png');
+%imwrite(hsi, './fig/HSI2RGB_peppers.png');
+imwrite(hsi, './fig/HSI2RGB_cb.png');

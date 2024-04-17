@@ -17,6 +17,11 @@ YCbCr = np.array([[ 77,  150,  29],
                   [127, -106, -21]]) / 256.
 img_YCbCr = img.dot(YCbCr)
 Y, Cb, Cr = np.split(img_YCbCr, 3, axis=2)
+Cb += 128
+Cr += 128
+#Y = np.clip(Y, 0, 255).astype(np.uint8)
+#Cb = np.clip(Cb, 0, 255).astype(np.uint8)
+#Cr = np.clip(Cr, 0, 255).astype(np.uint8)
 cv2.imwrite('./fig/YCbCr_astronaut.png', cv2.hconcat([Y, Cb, Cr])) 
 
 # 3) HSI, Python

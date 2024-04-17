@@ -15,7 +15,7 @@ S = [s 0 0;
      0 s 0; 
      0 0 1];
 scaled = imwarp(img, projective2d(S), 'OutputView', imref2d(size(img)));
-imwrite(scaled, './fig/scaling_peppers.png', 'png')
+imwrite(scaled, './fig/scaling_peppers.png', 'png');
 %imwrite(scaled, './fig/scaling_cb.png', 'png')
 
 % 2) Rotation, Matlab
@@ -24,7 +24,7 @@ R = [cos(theta) -sin(theta) 0;
      sin(theta) cos(theta)  0; 
      0          0           1];
 rotated = imwarp(img, projective2d(R), 'OutputView', imref2d(size(img)));
-imwrite(rotated, './fig/rotation_peppers.png', 'png')
+imwrite(rotated, './fig/rotation_peppers.png', 'png');
 %imwrite(rotated, './fig/rotation_cb.png', 'png')
 
 % 3) Similarity, Matlab
