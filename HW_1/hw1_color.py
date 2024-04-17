@@ -15,10 +15,10 @@ cv2.imwrite('./fig/RGB_astronaut.png', cv2.hconcat([R, G, B]))
 YCbCr = np.array([[ 77,  150,  29],
                   [-43,  -84, 127],
                   [127, -106, -21]]) / 256.
-img_YCbCr = img.dot(YCbCr)
+img_YCbCr = img.dot(YCbCr.T)
 Y, Cb, Cr = np.split(img_YCbCr, 3, axis=2)
-Cb += 128
-Cr += 128
+Cb = np.clip(Cb+128, 0, 255)
+Cr = np.clip(Cr+128, 0, 255)
 #Y = np.clip(Y, 0, 255).astype(np.uint8)
 #Cb = np.clip(Cb, 0, 255).astype(np.uint8)
 #Cr = np.clip(Cr, 0, 255).astype(np.uint8)

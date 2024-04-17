@@ -14,7 +14,7 @@ imwrite([R, G, B], './fig/RGB_cb.png');
 YCbCr = [ 77  150   29; 
          -43  -84  127; 
          127 -106  -21;] / 256.;
-img_YCbCr = reshape(double(img)/255, [], 3) * YCbCr;
+img_YCbCr = reshape(double(img)/255, [], 3) * YCbCr';
 img_YCbCr = reshape(img_YCbCr, size(img));
 Y = img_YCbCr(:, :, 1);
 Cb = min(img_YCbCr(:, :, 2) + 0.5, 1);
