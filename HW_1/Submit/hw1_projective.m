@@ -2,6 +2,7 @@
 2022094093 Kim Dohoon
 Assignment#1
 %}
+clear all;
 
 % Load peppers.png
 img = imread('peppers.png');
@@ -28,11 +29,12 @@ imwrite(rotated, './fig/rotation_peppers.png', 'png');
 %imwrite(rotated, './fig/rotation_cb.png', 'png')
 
 % 3) Similarity, Matlab
-s = 3;
+s = 0.5;
 theta = pi / 3;
-Sim = [s*cos(theta) -sin(theta)  0; 
-       sin(theta)   s*cos(theta) 0; 
-       0            0            1];
+Sim = [cos(theta) -sin(theta)  0; 
+       sin(theta)  cos(theta)  0; 
+       0            0          1] .* s;
+Sim(3, 3) = 1;
 similarity = imwarp(img, projective2d(Sim), 'OutputView', imref2d(size(img)));
 imwrite(similarity, './fig/similarity_peppers.png', 'png');
 %imwrite(similarity, './fig/similarity_cb.png', 'png');
@@ -44,3 +46,11 @@ Aff = [   2 0.33 0;
 affine = imwarp(img, projective2d(Aff), 'OutputView', imref2d(size(img)));
 imwrite(affine, './fig/affine_peppers.png', 'png');
 %imwrite(affine, './fig/affine_cb.png', 'png');
+
+% 5) Projective, Matlab
+Proj = [   1     0.2  0.005;
+        -0.1    0.07 -0.005;
+          50      30      1;];
+projective = imwarp(img, projective2d(Proj), 'OutputView', imref2d(size(img)));
+imwrite(projective, './fig/projective_peppers.png', 'png');
+%imwrite(projective, './fig/projective_cb.png', 'png');

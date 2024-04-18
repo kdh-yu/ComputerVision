@@ -131,11 +131,7 @@ $$
 x' \\ y' \\ 1
 \end{bmatrix}
 =
-\begin{bmatrix}
-s & 0 & 0 \\
-0 & s & 0 \\
-0 & 0 & 1
-\end{bmatrix}
+s
 \begin{bmatrix}
 \cos\theta & -\sin\theta & 0 \\
 \sin\theta & \cos\theta & 0 \\
@@ -146,8 +142,8 @@ x \\ y \\ 1
 \end{bmatrix}
 \\
 = \begin{bmatrix}
-s\cdot \cos\theta & -\sin\theta & 0 \\
-\sin\theta & s\cdot \cos\theta & 0 \\
+s\cdot \cos\theta & -s\cdot \sin\theta & 0 \\
+s\cdot \sin\theta & s\cdot \cos\theta & 0 \\
 0 & 0 & 1
 \end{bmatrix}
 \begin{bmatrix}
@@ -214,6 +210,50 @@ $$
         \caption{Own image}
     \end{subfigure}
     \caption{Affine transform}
+\end{figure}
+
+\newpage
+\subsection{Projective}
+Without changing last item (row 3, column 3 as 1), Projective transform is the most generalized form.
+Now we have scaling, rotating, and translating.  
+
+$$ \begin{bmatrix}
+    x' \\ y' \\ 1
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+    a & b & c \\
+    d & e & f \\
+    g & h & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+    x \\ y \\ 1
+\end{bmatrix} $$
+Degree of freedom is 6 due to the variables from $a$ to $f$.
+Here, I used this matrix.
+$$ 
+\begin{bmatrix}
+    1 & -0.1 & 50 \\
+    0.2 & 0.07 & 30 \\
+    0.005 & -0.005 & 1
+\end{bmatrix} 
+$$
+
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}{0.356\textwidth}
+        \includegraphics[width=\textwidth]{./fig/projective_peppers.png}
+        \caption{peppers, Matlab}
+    \end{subfigure}
+    \begin{subfigure}{0.267\textwidth}
+        \includegraphics[width=\textwidth]{./fig/projective_astronaut.png}
+        \caption{astronaut, Python}
+    \end{subfigure}
+    \begin{subfigure}{0.2\textwidth}
+        \includegraphics[width=\textwidth]{./fig/projective_cb.png}
+        \caption{Own image}
+    \end{subfigure}
+    \caption{Projective transform}
 \end{figure}
 
 \newpage
