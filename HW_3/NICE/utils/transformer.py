@@ -47,8 +47,8 @@ class CaptioningTransformer(nn.Module):
         self.embedding = nn.Embedding(vocab_size, wordvec_dim, padding_idx=self._null)
         self.positional_encoding = PositionalEncoding(wordvec_dim, max_len=max_length)
 
-        decoder_layer = TransformerDecoderLayer(input_dim=wordvec_dim, num_heads=num_heads)
-        self.transformer = TransformerDecoder(decoder_layer, num_layers=num_layers, dropout=self.dropout)
+        decoder_layer = TransformerDecoderLayer(input_dim=wordvec_dim, num_heads=num_heads, dropout=dropout)
+        self.transformer = TransformerDecoder(decoder_layer, num_layers=num_layers)
         self.apply(self._init_weights)
 
         self.output = nn.Linear(wordvec_dim, vocab_size)

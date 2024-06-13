@@ -51,7 +51,7 @@ class CaptioningTransformer(nn.Module):
         self.transformer = TransformerDecoder(decoder_layer, num_layers=num_layers)
         self.apply(self._init_weights)
 
-        self.output = nn.Linear(wordvec_dim, vocab_size)
+        self.output = nn.Linear(wordvec_dim+input_dim, vocab_size)
 
     def _init_weights(self, module):
         """
@@ -141,7 +141,7 @@ class CaptioningTransformer(nn.Module):
                 word = torch.argmax(output_logits, axis=1)
 
                 # Update our overall caption and our current partial caption.
-                captions[:, t] = word.numpy()
+                captions[:, t] = word.cpu().numpy()
                 word = word.unsqueeze(1)
                 partial_caption = torch.cat([partial_caption, word], dim=1)
 

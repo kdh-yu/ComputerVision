@@ -71,7 +71,7 @@ class CaptioningSolverTransformer(object):
         self.data = data
         self.device = (
             'cuda' if torch.cuda.is_available()
-            else 'mps' if torch.backend.mps.is_available()
+            else 'mps' if torch.backends.mps.is_available()
             else 'cpu'
         )
 
@@ -82,7 +82,7 @@ class CaptioningSolverTransformer(object):
 
         self.print_every = kwargs.pop("print_every", 10)
         self.verbose = kwargs.pop("verbose", True)
-        self.optim = torch.optim.AdamW(self.model.parameters(), self.learning_rate, weight_decay=0.01)
+        self.optim = torch.optim.AdamW(self.model.parameters(), self.learning_rate)
 
         # Throw an error if there are extra keyword arguments
         if len(kwargs) > 0:
@@ -103,14 +103,14 @@ class CaptioningSolverTransformer(object):
         self.loss_history = []
 
 
-    def _step(self):
+    def _step(self, split='train'):
         """
         Make a single gradient update. This is called by train() and should not
         be called manually.
         """
         # Make a minibatch of training data
         minibatch = sample_coco_minibatch(
-            self.data, batch_size=self.batch_size, split="train"
+            self.data, batch_size=self.batch_size, split=split
         )
         captions, features, urls = minibatch
 
@@ -131,29 +131,16 @@ class CaptioningSolverTransformer(object):
         loss.backward()
         self.optim.step()
 
-    def train(self):
+    def train(self, split='train'):
       """
       Run optimization to train the model.
       """
-      start_time = time.time()
-      num_train = self.data["train_captions"].shape[0]
+      num_train = self.data["nice_feature"].shape[0]
       iterations_per_epoch = max(num_train // self.batch_size, 1)
-      num_iterations = self.num_epochs * iterations_per_epoch
-
-      for t in range(num_iterations):
-          self._step()
-
-          # Maybe print training loss
-          if self.verbose and t % (self.print_every-1) == 0:
-              print(
-                  "(Iteration %d / %d) loss: %f"
-                  % (t + 1, num_iterations, self.loss_history[-1]), end='\t'
-              )
-              print(f"Total {(time.time()-start_time)%60} minutes and {(time.time()-start_time)//60} seconds passed.")
-
-          # At the end of every epoch, increment the epoch counter.
-          epoch_end = (t + 1) % iterations_per_epoch == 0
-      print(epoch_end)
+      for epoch in tqdm(range((len(self.num_epochs)))):
+        for _ in range(iterations_per_epoch):
+            self._step(split=split)
+        print(f"Epoch {epoch} Fin / Loss={self.loss_history[-1]}")
 
     def transformer_temporal_softmax_loss(self, x, y, mask):
         """
